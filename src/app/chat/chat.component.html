@@ -1,0 +1,27 @@
+<div class="chat-container">
+
+    <div class="chat-header">
+        <h2>Chatbot</h2>
+        <img src="assets/logo.png" alt="Logo" class="chat-logo" />
+    </div>
+
+    <div class="study-program-dropdown">
+        <label for="studyProgramSelect" class="dropdown-label">Select Study Program:</label>
+        <ng-select class="select" [items]="studyPrograms" bindLabel="label" bindValue="value"
+            [formControl]="studyProgramControl" placeholder="Select your study program">
+        </ng-select>
+    </div>
+
+    <div class="chat-body" #chatbotBody>
+        <div class="message" *ngFor="let message of messages" [ngClass]="message.type">
+            <span>{{ message.message }}</span>
+        </div>
+        <div #scrollAnchor></div>
+    </div>
+
+    <div class="chat-footer">
+        <input type="text" [(ngModel)]="userMessage" (keyup.enter)="sendMessage()"
+            placeholder="Type your message here..." />
+        <button (click)="sendMessage()">Send</button>
+    </div>
+</div>

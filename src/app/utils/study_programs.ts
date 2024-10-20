@@ -1,0 +1,30 @@
+
+
+
+export const studyPrograms: Array<{ value: string, label: string }> = [
+    { value: 'master_bioinformatik', label: 'Master Bioinformatik' },
+    { value: 'master_biomedical_computing', label: 'Master Biomedical Computing' },
+    { value: 'master_communications_electronics_engineering', label: 'Master Communications Electronics Engineering' },
+    { value: 'master_computational_science_engineering', label: 'Master Computational Science Engineering' },
+    { value: 'master_data_engineering_analytics', label: 'Master Data Engineering Analytics' },
+    { value: 'master_elektrotechnik_informationstechnik', label: 'Master Elektrotechnik Informationstechnik' },
+    { value: 'master_informatik', label: 'Master Informatik' },
+    { value: 'master_informatik_games_engineering', label: 'Master Informatik Games Engineering' },
+    { value: 'master_information_engineering', label: 'Master Information Engineering' },
+    { value: 'master_information_systems', label: 'Master Information Systems' },
+    { value: 'master_mathematical_finance_actuarial_science', label: 'Master Mathematical Finance Actuarial Science' },
+    { value: 'master_mathematics_data_science', label: 'Master Mathematics Data Science' },
+    { value: 'master_mathematics_operations_research', label: 'Master Mathematics Operations Research' },
+    { value: 'master_mathematics_science_engineering', label: 'Master Mathematics Science Engineering' },
+    { value: 'master_mathematik', label: 'Master Mathematik' },
+    { value: 'master_robotics_cognition_intelligence', label: 'Master Robotics Cognition Intelligence' },
+    { value: 'master_neuroengineering', label: 'Neuroengineering' },
+    { value: 'master_topmath', label: 'TopMath' },
+    { value: 'bachelor_bioinformatik', label: 'Bachelor Bioinformatik' },
+    { value: 'bachelor_elektrotechnik_informationstechnik', label: 'Bachelor Elektrotechnik Informationstechnik' },
+    { value: 'bachelor_informatik', label: 'Bachelor Informatik' },
+    { value: 'bachelor_informatik_games_engineering', label: 'Bachelor Informatik Games Engineering' },
+    { value: 'bachelor_information_engineering', label: 'Bachelor Information Engineering' },
+    { value: 'bachelor_mathematik', label: 'Bachelor Mathematik' },
+    { value: 'bachelor_wirtschaftsinformatik', label: 'Bachelor Wirtschaftsinformatik' },
+];

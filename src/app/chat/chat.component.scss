@@ -1,0 +1,121 @@
+$primary-color: #072140;
+$tum-light-blue: #3070b3;
+$tum-blue-dark: #072140;
+$tum-blue-light-dark: #0a2d57;
+$tum-acordion-blue: #f0f5fa;
+$system-message-color: #64a0c8;
+$user-message-color: #0a2d57;
+$background-color: #f4f4f4;
+$border-color: #ccc;
+$chat-height: 500px;
+$chat-width: 100%;
+$header-height: 50px;
+$logo-size: 40px;
+
+.chat-container {
+    font-family: roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: $chat-width;
+    height: $chat-height;
+    border: 1px solid $border-color;
+    background-color: $background-color;
+    border-radius: 8px;
+    overflow: hidden;
+
+    .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $primary-color;
+        color: white;
+        padding: 10px;
+        font-size: 18px;
+        height: $header-height;
+    }
+
+    .chat-logo {
+        width: $logo-size;
+        height: $logo-size;
+        object-fit: contain;
+    }
+
+    .chat-body {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .message {
+        margin: 8px 0;
+        padding: 10px;
+        border-radius: 16px;
+        max-width: 70%;
+        word-wrap: break-word;
+        line-height: 1.5;
+        display: inline-block;
+
+        &.system {
+            background-color: $tum-light-blue;
+            color: white;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+
+        &.user {
+            background-color: $tum-acordion-blue;
+            color: $tum-blue-dark;
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+    }
+
+    .chat-footer {
+        display: flex;
+        padding: 10px;
+        background-color: $tum-acordion-blue;
+        border-top: 1px solid $border-color;
+
+        input[type='text'] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid $border-color;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: $tum-light-blue;
+            color: white;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $primary-color;
+            }
+        }
+    }
+}
+
+.study-program-dropdown {
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: $tum-acordion-blue;
+    border-bottom: 1px solid $border-color;
+    color: $tum-blue-dark;
+
+    .dropdown-label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+}
