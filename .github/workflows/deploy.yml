@@ -10,33 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print Repository Variables
-        run: |
-          echo "VM_HOST: ${{ vars.VM_HOST }}"
-          echo "VM_USERNAME: ${{ vars.VM_USERNAME }}"
-
-      - name: Test SSH Key Access
-        run: |
-          if [ -z "${{ secrets.DEPLOYMENT_GATEWAY_SSH_KEY }}" ]; then
-            echo "SSH private key not found!"
-          else
-            echo "SSH private key exists."
-          fi
-
-      - name: Test SSH Connection
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ vars.VM_HOST }}
-          username: ${{ vars.VM_USERNAME }}
-          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          proxy_host: ${{ vars.DEPLOYMENT_GATEWAY_HOST }}
-          proxy_username: ${{ vars.DEPLOYMENT_GATEWAY_USER }}
-          proxy_key: ${{ secrets.DEPLOYMENT_GATEWAY_SSH_KEY }}
-          proxy_port: ${{ vars.DEPLOYMENT_GATEWAY_PORT }}
-          command_timeout: 1m
-          script: |
-            echo "SSH connection successful!"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -68,7 +41,7 @@ jobs:
           platforms: amd64, arm64
           file: ./Dockerfile
           context: .
-          tags: ghcr.io/ls1intum/eunomnia:latest
+          tags: ghcr.io/ls1intum/angelos-ui:latest
           push: true
 
   deploy:
