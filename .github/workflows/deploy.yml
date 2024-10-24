@@ -17,7 +17,7 @@ jobs:
 
       - name: Test SSH Key Access
         run: |
-          if [ -z "${{ secrets.VM_SSH_PRIVATE_KEY }}" ]; then
+          if [ -z "${{ secrets.DEPLOYMENT_GATEWAY_SSH_KEY }}" ]; then
             echo "SSH private key not found!"
           else
             echo "SSH private key exists."
