@@ -1,0 +1,80 @@
+name: Deploy Angelos-UI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Check if Docker network exists and create it if not
+        run: |
+          if ! docker network inspect angelos-network >/dev/null 2>&1; then
+            echo "Network 'angelos-network' does not exist, creating it..."
+            docker network create angelos-network
+          else
+            echo "Network 'angelos-network' already exists."
+          fi
+
+      - name: Build and Push to GitHub Container Registry
+        uses: docker/build-push-action@v6
+        with:
+          platforms: amd64, arm64
+          file: ./Dockerfile
+          context: .
+          tags: ghcr.io/ls1intum/eunomnia:latest
+          push: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Copy Docker Compose File From Repo to VM Host
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.VM_HOST }}
+          username: ${{ vars.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          proxy_host: ${{ vars.DEPLOYMENT_GATEWAY_HOST }}
+          proxy_username: ${{ vars.DEPLOYMENT_GATEWAY_USER }}
+          proxy_key: ${{ secrets.DEPLOYMENT_GATEWAY_SSH_KEY }}
+          proxy_port: ${{ vars.DEPLOYMENT_GATEWAY_PORT }}
+          source: "./docker-compose.yml"
+          target: /home/${{ vars.VM_USERNAME }}
+
+
+      - name: SSH to VM and Execute Docker-Compose Up
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.VM_HOST }}
+          username: ${{ vars.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          proxy_host: ${{ vars.DEPLOYMENT_GATEWAY_HOST }}
+          proxy_username: ${{ vars.DEPLOYMENT_GATEWAY_USER }}
+          proxy_key: ${{ secrets.DEPLOYMENT_GATEWAY_SSH_KEY }}
+          proxy_port: ${{ vars.DEPLOYMENT_GATEWAY_PORT }}
+          script: |
+            docker compose -f /home/${{ vars.VM_USERNAME }}/docker-compose.yml --env-file=.env.prod up --pull=always -d
