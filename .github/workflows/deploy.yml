@@ -15,6 +15,14 @@ jobs:
           echo "VM_HOST: ${{ vars.VM_HOST }}"
           echo "VM_USERNAME: ${{ vars.VM_USERNAME }}"
 
+      - name: Test SSH Key Access
+        run: |
+          if [ -z "${{ secrets.VM_SSH_PRIVATE_KEY }}" ]; then
+            echo "SSH private key not found!"
+          else
+            echo "SSH private key exists."
+          fi
+
       - name: Test SSH Connection
         uses: appleboy/ssh-action@v1.0.3
         with:
