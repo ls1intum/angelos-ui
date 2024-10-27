@@ -1,19 +1,9 @@
 services:
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - angelos-ui
-    networks:
-      - angelos-network
-
   angelos-ui:
     image: "ghcr.io/ls1intum/angelos-ui:latest"
     container_name: angelos-ui
     expose:
-      - "80"
+      - "80:80"
     networks:
       - angelos-network
 
