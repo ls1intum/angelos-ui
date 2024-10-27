@@ -34,6 +34,7 @@ jobs:
           context: .
           tags: ghcr.io/ls1intum/angelos-ui:latest
           push: true
+          no-cache: true
 
   deploy:
     needs: build
