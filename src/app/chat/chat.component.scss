@@ -65,13 +65,6 @@ $logo-size: 40px;
             color: white;
             align-self: flex-start;
             border-top-left-radius: 0;
-
-            a {
-                color: white;          // Set link text to white
-                font-weight: bold;      // Make the link bold
-                text-decoration: underline; // Ensure underline
-                cursor: pointer;        // Pointer cursor on hover
-            }
         }
 
         &.user {
