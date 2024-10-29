@@ -145,7 +145,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   formatResponseText(text: string): string {
     const withLineBreaks = text.replace(/(\d+\.\s*\*\*.*?\*\*)/g, '<br>$1');
     const boldFormatted = withLineBreaks.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    const linkFormatted = boldFormatted.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    const linkFormatted = boldFormatted.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="system-link">$1</a>');
     return linkFormatted;
   }
 
@@ -206,7 +206,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         lastMessageElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
         setTimeout(() => {
-          this.chatBody!.nativeElement.scrollTop += 8;
+          this.chatBody!.nativeElement.scrollTop += 12;
         }, 500);
       }
     }, 0);
