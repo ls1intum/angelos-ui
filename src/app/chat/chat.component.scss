@@ -7,9 +7,9 @@ $system-message-color: #64a0c8;
 $user-message-color: #0a2d57;
 $background-color: #f4f4f4;
 $border-color: #ccc;
-$chat-height: 500px;
+$chat-height: 640px;
 $chat-width: 100%;
-$header-height: 50px;
+$header-height: 40px;
 $logo-size: 40px;
 
 .chat-container {
@@ -30,8 +30,8 @@ $logo-size: 40px;
         align-items: center;
         background-color: $primary-color;
         color: white;
-        padding: 10px;
-        font-size: 18px;
+        padding: 8px;
+        font-size: 14px;
         height: $header-height;
     }
 
@@ -65,6 +65,13 @@ $logo-size: 40px;
             color: white;
             align-self: flex-start;
             border-top-left-radius: 0;
+
+            a {
+                color: white;          // Set link text to white
+                font-weight: bold;      // Make the link bold
+                text-decoration: underline; // Ensure underline
+                cursor: pointer;        // Pointer cursor on hover
+            }
         }
 
         &.user {
@@ -81,30 +88,87 @@ $logo-size: 40px;
         background-color: $tum-acordion-blue;
         border-top: 1px solid $border-color;
 
-        input[type='text'] {
+        textarea {
+            box-sizing: border-box;
             flex: 1;
             padding: 10px;
             border: 1px solid $border-color;
             border-radius: 4px;
             font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            overflow-y: hidden;
+            min-height: calc(1.5em * 1); // Minimum height for 1 line
+            max-height: calc(1.5em * 4); // Maximum height for 4 lines
         }
 
         button {
             background-color: $tum-light-blue;
             color: white;
-            padding: 10px 20px;
+            padding: 10px;
             margin-left: 10px;
             border: none;
             border-radius: 4px;
-            font-size: 14px;
             cursor: pointer;
-
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        
             &:hover {
                 background-color: $primary-color;
+            }
+        
+            svg {
+                fill: white;
+                width: 20px;
+                height: 20px;
             }
         }
     }
 }
+
+.dot-loader {
+    display: inline-flex;
+    gap: 4px;
+    background-color: $tum-light-blue; // Match the system message bubble color
+    color: white; // Text color within the bubble
+    padding: 10px;
+    border-radius: 16px;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+  }
+  
+  .dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background-color: white; // Dot color matches text color
+    border-radius: 50%;
+    animation: dotBounce 1s infinite ease-in-out;
+  }
+  
+  .dot:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes dotBounce {
+    0%, 80%, 100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    40% {
+      transform: translateY(-2px);
+      opacity: 0.7;
+    }
+  }
 
 .study-program-dropdown {
     box-sizing: border-box;
