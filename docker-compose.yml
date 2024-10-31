@@ -3,9 +3,9 @@ services:
     image: "ghcr.io/ls1intum/angelos-ui:latest"
     container_name: angelos-ui
     ports:
-      - "80:80"
+      - "443:443"
     expose:
-      - "80"
+      - "443"
     networks:
       - angelos-network
 
