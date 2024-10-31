@@ -7,7 +7,9 @@ services:
     expose:
       - "443"
     volumes:
-      - /var/lib/rbg-cert/2024-10-31T11\:10\:43+01\:00:/etc/ssl/certs:ro
+      - type: bind
+        source: /var/lib/rbg-cert/2024-10-31T11:10:43+01:00
+        target: /etc/ssl/certs
     networks:
       - angelos-network
 
