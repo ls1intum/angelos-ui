@@ -73,4 +73,4 @@ jobs:
               docker network create angelos-network
             fi
             docker network ls
-            docker compose -f /home/${{ vars.VM_USERNAME }}/${{ github.repository }}/docker-compose.yml up --pull=always -d
+            docker compose -f /home/${{ vars.VM_USERNAME }}/${{ github.repository }}/docker-compose.yml up --pull=always -d --force-recreate --remove-orphans
