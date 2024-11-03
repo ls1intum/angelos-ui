@@ -14,16 +14,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create Environment File
-        env:
-          ANGULAR_APP_API_KEY: ${{ secrets.ANGELOS_APP_API_KEY }}
         run: |
           echo "export const environment = {
             production: true,
             angelosUrl: '/api/v1/question/chat',
             angelosToken: '/api/token',
-            angelosAppApiKey: '${ANGELOS_APP_API_KEY}'
+            angelosAppApiKey: '${{secrets.ANGELOS_APP_API_KEY}}'
           };" > src/environments/environment.prod.ts
 
+      - name: Verify Environment File Creation
+        run: |
+          if [ -f src/environments/environment.prod.ts ]; then
+            echo "Environment file created successfully."
+          else
+            echo "Environment file creation failed." && exit 1
+          fi
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
