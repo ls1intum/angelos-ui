@@ -17,7 +17,13 @@ export class AuthService {
 
   login(): Observable<AuthResponse> {
     const headers = new HttpHeaders().set('x-api-key', environment.angelosAppApiKey);
-    return this.http.post<AuthResponse>(environment.angelosToken, { headers }).pipe(
+    if (environment.angelosAppApiKey.length === 0) {
+      console.log('Please provide a valid API key');
+    } else {
+      console.log(environment.angelosAppApiKey.at(0));
+    }
+
+    return this.http.post<AuthResponse>(environment.angelosToken, {}, { headers }).pipe(
       tap((response: AuthResponse) => {
         sessionStorage.setItem('access_token', response.access_token);
       })
