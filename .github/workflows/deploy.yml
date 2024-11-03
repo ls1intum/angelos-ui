@@ -13,6 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Create Environment File
+        env:
+          ANGULAR_APP_API_KEY: ${{ secrets.ANGELOS_APP_API_KEY }}
+        run: |
+          echo "export const environment = {
+            production: true,
+            angelosUrl: '/api/v1/question/chat',
+            angelosToken: '/api/token',
+            angelosAppApiKey: '${ANGELOS_APP_API_KEY}'
+          };" > src/environments/environment.prod.ts
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -56,17 +67,6 @@ jobs:
           proxy_port: ${{ vars.DEPLOYMENT_GATEWAY_PORT }}
           source: "./docker-compose.yml"
           target: /home/${{ vars.VM_USERNAME }}/${{ github.repository }}
-
-      - name: Create Environment File
-        env:
-          ANGULAR_APP_API_KEY: ${{ secrets.ANGELOS_APP_API_KEY }}
-        run: |
-          echo "export const environment = {
-            production: true,
-            angelosUrl: '/api/v1/question/chat',
-            angelosToken: '/api/token',
-            angelosAppApiKey: '${ANGELOS_APP_API_KEY}'
-          };" > src/environments/environment.prod.ts
 
       - name: SSH to VM and Execute Docker-Compose Up
         uses: appleboy/ssh-action@v1.0.3
