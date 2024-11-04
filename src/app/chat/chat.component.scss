@@ -110,6 +110,12 @@ $logo-size: 40px;
             &:hover {
                 background-color: $primary-color;
             }
+
+            &.disabled {
+                background-color: $border-color;
+                color: #aaa;
+                cursor: not-allowed;
+            }
         
             svg {
                 fill: white;

@@ -6,7 +6,7 @@
     </div>
 
     <div class="study-program-dropdown">
-        <label for="studyProgramSelect" class="dropdown-label">Select Study Program:</label>
+        <label for="studyProgramSelect" class="dropdown-label">{{ dropdownLabel }}</label>
         <ng-select class="select" [items]="studyPrograms" bindLabel="label" bindValue="value"
             [formControl]="studyProgramControl" placeholder="Select your study program">
         </ng-select>
@@ -45,10 +45,13 @@
           (keydown)="onKeyDown($event)"
           [placeholder]="placeholderText"
           rows="1"></textarea>
-        <button (click)="sendMessage()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-            </svg>
+        <button 
+          (click)="sendMessage()"
+          [disabled]="disableSending"
+          [ngClass]="{ 'disabled': disableSending }">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
         </button>
     </div>
 </div>
