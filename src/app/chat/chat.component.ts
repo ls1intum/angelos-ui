@@ -21,7 +21,8 @@ export const MESSAGES = {
       If you'd like program-specific advice, please select your study program from the dropdown menu at the top, and I'll provide you with the most relevant information.
     `,
     errorMessage: `Sorry, but I am currently unable to answer your questions. Please try again at a later time.`,
-    placeholder: `Type your message here...`
+    placeholder: `Type your message here...`,
+    dropdownLabel: `Select Study Program:`
   },
   de: {
     welcomeMessage: `
@@ -32,7 +33,8 @@ export const MESSAGES = {
       Wenn Sie studiengangspezifische Ratschläge benötigen, wählen Sie bitte Ihr Studienprogramm aus dem Dropdown-Menü oben, und ich werde Ihnen die relevantesten Informationen bereitstellen.
     `,
     errorMessage: `Entschuldigung, aber ich kann Ihre Fragen derzeit nicht beantworten. Bitte versuchen Sie es später erneut.`,
-    placeholder: `Geben Sie hier Ihre Nachricht ein...`
+    placeholder: `Geben Sie hier Ihre Nachricht ein...`,
+    dropdownLabel: `Studiengang auswählen:`
   }
 };
 
@@ -54,6 +56,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   placeholderText: string = '';
   welcomeMessage: string = '';
   errorMessage: string = '';
+  dropdownLabel: string = '';
 
   // FormControl for the study program dropdown
   studyProgramControl = new FormControl('');
@@ -61,6 +64,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   language: 'en' | 'de' = 'en'; // Default language is English
   private needScrollToBottom: boolean = false;
+  disableSending: boolean = false;
 
   constructor(private chatbotService: ChatbotService, private route: ActivatedRoute) { }
 
@@ -84,6 +88,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.welcomeMessage = MESSAGES[this.language].welcomeMessage;
     this.errorMessage = MESSAGES[this.language].errorMessage;
     this.placeholderText = MESSAGES[this.language].placeholder;
+    this.dropdownLabel = MESSAGES[this.language].dropdownLabel;
   }
 
   onKeyDown(event: KeyboardEvent): void {
@@ -92,7 +97,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       !event.shiftKey &&
       !event.ctrlKey &&
       !event.altKey &&
-      !event.metaKey
+      !event.metaKey &&
+      !this.disableSending
     ) {
       event.preventDefault(); // Prevents the default action of adding a newline
       this.sendMessage();
@@ -102,6 +108,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   sendMessage() {
     if (this.userMessage.trim()) {
       // Add the user's message to the messages array
+      this.disableSending = true;
       this.messages.push({ message: this.userMessage, type: 'user' });
       this.userMessage = '';
       this.resetTextAreaHeight();
@@ -113,9 +120,10 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       const loadingMessage: ChatMessage = { message: '', type: 'loading' };
       this.messages.push(loadingMessage);
       this.needScrollToBottom = true;
-  
-      // Prepare the messages to send to the bot, excluding the loading message
-      const messagesToSend = this.messages.filter(msg => msg.type !== 'loading');
+
+      const nonLoadingMessages = this.messages.filter(msg => msg.type !== 'loading');
+      // Keep only the last 5 messages, if there are 5 or more
+      const messagesToSend = nonLoadingMessages.slice(-5);
   
       // Call the bot service with the filtered messages
       this.chatbotService.getBotResponse(messagesToSend, selectedProgram).subscribe({
@@ -126,6 +134,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
           const formattedResponse = this.formatResponseText(response.answer);
           this.messages.push({ message: formattedResponse, type: 'system' });
           this.needScrollToBottom = true;
+          this.disableSending = false;
         },
         error: (error) => {
           console.error('Error fetching response:', error);
@@ -137,6 +146,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
             type: 'system'
           });
           this.needScrollToBottom = true;
+          this.disableSending = false;
         }
       });
     }
