@@ -1,37 +1,42 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import * as CryptoJS from 'crypto-js';
 
 export interface AuthResponse {
   access_token: string;
   token_type: string;
 }
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private isAuthenticated = new BehaviorSubject<boolean>(this.getToken() !== null);
 
   constructor(private http: HttpClient) { }
 
-  login(): Observable<AuthResponse> {
+  login(username: string, password: string): Observable<AuthResponse> {
     const headers = new HttpHeaders().set('x-api-key', environment.angelosAppApiKey);
-    if (environment.angelosAppApiKey.length === 0) {
-      console.log('Please provide a valid API key');
-    } else {
-      console.log(environment.angelosAppApiKey.at(0));
-    }
-
-    return this.http.post<AuthResponse>(environment.angelosToken, {}, { headers }).pipe(
+    const body = { username: username, password: password };
+    return this.http.post<AuthResponse>(environment.angelosToken, body, { headers }).pipe(
       tap((response: AuthResponse) => {
         sessionStorage.setItem('access_token', response.access_token);
+        this.isAuthenticated.next(true);
       })
     );
   }
 
-  // Method to retrieve the stored token
-  public getToken(): string | null {
+  logout(): void {
+    sessionStorage.removeItem('access_token');
+    this.isAuthenticated.next(false);
+  }
+
+  getToken(): string | null {
     return sessionStorage.getItem('access_token');
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.isAuthenticated.asObservable();
   }
 }

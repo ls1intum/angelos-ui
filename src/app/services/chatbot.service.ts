@@ -25,13 +25,7 @@ export class ChatbotService {
     if (token) {
       return this.sendBotRequest(token, chatHistory, study_program);
     } else {
-      // Login if no token is stored, then proceed with the bot request
-      return this.authService.login().pipe(
-        switchMap(() => {
-          const newToken = this.authService.getToken();
-          return this.sendBotRequest(newToken, chatHistory, study_program);
-        })
-      );
+      throw new Error('No token found. Access should have been restricted by AuthGuard.');
     }
   }
 }
