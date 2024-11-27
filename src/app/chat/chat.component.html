@@ -1,15 +1,10 @@
 <div class="chat-container">
 
     <div class="chat-header">
-        <h2>CIT Chatbot</h2>
-        <img src="assets/logo.png" alt="Logo" class="chat-logo" />
-    </div>
-
-    <div class="study-program-dropdown">
-        <label for="studyProgramSelect" class="dropdown-label">{{ dropdownLabel }}</label>
-        <ng-select class="select" [items]="studyPrograms" bindLabel="label" bindValue="value"
-            [formControl]="studyProgramControl" placeholder="Select your study program">
-        </ng-select>
+      <ng-select class="study-program-dropdown" [items]="studyPrograms" bindLabel="label" bindValue="value"
+          [formControl]="studyProgramControl" [placeholder]="dropdownLabel">
+      </ng-select>
+      <img src="assets/logo.png" alt="Logo" class="chat-logo" />
     </div>
 
     <div class="chat-body" #chatBody>

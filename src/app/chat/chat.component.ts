@@ -22,7 +22,7 @@ export const MESSAGES = {
     `,
     errorMessage: `Sorry, but I am currently unable to answer your questions. Please try again at a later time.`,
     placeholder: `Type your message here...`,
-    dropdownLabel: `Select Study Program:`
+    dropdownLabel: `Select Study Program`
   },
   de: {
     welcomeMessage: `
@@ -34,7 +34,7 @@ export const MESSAGES = {
     `,
     errorMessage: `Entschuldigung, aber ich kann Ihre Fragen derzeit nicht beantworten. Bitte versuchen Sie es später erneut.`,
     placeholder: `Geben Sie hier Ihre Nachricht ein...`,
-    dropdownLabel: `Studiengang auswählen:`
+    dropdownLabel: `Studiengang auswählen`
   }
 };
 
@@ -59,7 +59,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   dropdownLabel: string = '';
 
   // FormControl for the study program dropdown
-  studyProgramControl = new FormControl('');
+  studyProgramControl = new FormControl(null);
   studyPrograms = studyPrograms;
 
   language: 'en' | 'de' = 'en'; // Default language is English
@@ -114,7 +114,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       this.resetTextAreaHeight();
       this.needScrollToBottom = true;
   
-      const selectedProgram = this.studyProgramControl.value as string;
+      const selectedProgram = this.studyProgramControl.value? this.studyProgramControl.value as string : '';
   
       // Add a loading message to indicate the bot is typing
       const loadingMessage: ChatMessage = { message: '', type: 'loading' };

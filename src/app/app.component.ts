@@ -5,7 +5,7 @@ import { ChatComponent } from './chat/chat.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ChatComponent],
+  imports: [RouterOutlet],
   providers: [],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
