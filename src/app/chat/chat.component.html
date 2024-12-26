@@ -1,8 +1,9 @@
 <div class="chat-container">
+    <app-error-snackbar #errorSnackbar></app-error-snackbar>
 
     <div class="chat-header">
-      <ng-select class="study-program-dropdown" [items]="studyPrograms" bindLabel="label" bindValue="value"
-          [formControl]="studyProgramControl" [placeholder]="dropdownLabel">
+      <ng-select class="study-program-dropdown" [items]="studyPrograms" bindLabel="name" bindValue="id"
+        (change)="onProgramChange($event)" [placeholder]="dropdownLabel">
       </ng-select>
       <img src="assets/logo.png" alt="Logo" class="chat-logo" />
     </div>
