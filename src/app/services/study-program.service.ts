@@ -22,7 +22,6 @@ export class StudyProgramService {
     }
 
     const headers = new HttpHeaders().set('ChatAuth', `Bearer ${token}`);
-    console.log(headers);
 
     const params = { filterByOrg: this.filterByOrg.toString() };
     const url = `${this.url}/study-programs/${this.orgId}`;

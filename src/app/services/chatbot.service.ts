@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChatMessage } from '../chat/chat.component';
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -31,10 +31,10 @@ export class ChatbotService {
 
   getBotResponse(chatHistory: ChatMessage[], study_program: string): Observable<any> {
     const token = this.authService.getToken();
-    if (false && token) {
+    if (token) {
       return this.sendBotRequest(token, chatHistory, study_program);
     } else {
-      throw new Error('No token found. Access should have been restricted by AuthGuard.');
+      return throwError(() => new Error('TokenMissing'));
     }
   }
 }
