@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import * as CryptoJS from 'crypto-js';
 
 export interface AuthResponse {
   accessToken: string;
@@ -18,7 +17,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<AuthResponse> {
-    const headers = new HttpHeaders().set('x_api_key', environment.angelosAppApiKey);
+    const headers = new HttpHeaders().set('x-api-key', environment.angelosAppApiKey);
     const body = { email: username, password: password };
     return this.http.post<AuthResponse>(this.url + "/login", body, { headers }).pipe(
       tap((response: AuthResponse) => {
