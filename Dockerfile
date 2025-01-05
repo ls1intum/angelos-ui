@@ -13,7 +13,7 @@ RUN npm run build -- --configuration=production --base-href=/chat/
 # Stage 2: Serve the app with NGINX
 FROM nginx:stable-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist/chatbot/browser /usr/share/nginx/html
+COPY --from=build /app/dist/chatbot /usr/share/nginx/html
 
 EXPOSE 80
 
