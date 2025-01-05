@@ -3,8 +3,10 @@ import { Component, ElementRef, ViewChild, OnInit, ViewChildren, QueryList, Afte
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChatbotService } from '../services/chatbot.service';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { studyPrograms } from '../utils/study_programs';
 import { ActivatedRoute } from '@angular/router';
+import { ErrorSnackbarComponent } from '../utils/error-snackbar/error-snackbar.component';
+import { StudyProgramService } from '../services/study-program.service';
+import { StudyProgram } from '../data/study-program';
 
 export interface ChatMessage {
   message: string;
@@ -41,7 +43,13 @@ export const MESSAGES = {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    NgSelectModule, 
+    ReactiveFormsModule,
+    ErrorSnackbarComponent
+  ],
   providers: [ChatbotService],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
@@ -50,6 +58,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   @ViewChild('chatBody', { static: false }) chatBody: ElementRef | undefined;
   @ViewChild('messageInput') messageInput!: ElementRef;
   @ViewChildren('messageElements') messageElements!: QueryList<ElementRef>;
+  @ViewChild('errorSnackbar') errorSnackbar!: ErrorSnackbarComponent;
 
   messages: ChatMessage[] = [];
   userMessage: string = '';
@@ -58,18 +67,29 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   errorMessage: string = '';
   dropdownLabel: string = '';
 
-  // FormControl for the study program dropdown
-  studyProgramControl = new FormControl(null);
-  studyPrograms = studyPrograms;
+  studyPrograms: StudyProgram[] = [];
+  selectedStudyProgram: StudyProgram | null = null; 
 
   language: 'en' | 'de' = 'en'; // Default language is English
   private needScrollToBottom: boolean = false;
   disableSending: boolean = false;
 
-  constructor(private chatbotService: ChatbotService, private route: ActivatedRoute) { }
+  constructor(private chatbotService: ChatbotService, private studyProgramService: StudyProgramService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     // Get language from route data (or query params if applicable)
+    this.studyProgramService.getStudyPrograms().subscribe({
+      next: (studyPrograms) => {
+        this.studyPrograms = studyPrograms.sort((a, b) => {
+          if (a.name < b.name) return -1;
+          if (a.name > b.name) return 1;
+          return 0;
+        });
+      },
+      error: (error) => {
+        this.errorSnackbar.showError('Studiengänge konnten nicht geladen werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.', 5000);
+      }
+    });
     this.route.data.subscribe(data => {
       this.language = data['language'] || 'en';
       this.setLanguageContent();
@@ -113,8 +133,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       this.userMessage = '';
       this.resetTextAreaHeight();
       this.needScrollToBottom = true;
-  
-      const selectedProgram = this.studyProgramControl.value? this.studyProgramControl.value as string : '';
+
+      // Study program name in request format
+      const selectedProgramName = this.selectedStudyProgram?.name
+        .toLowerCase()
+        .replace(/\s+/g, '-') || '';
   
       // Add a loading message to indicate the bot is typing
       const loadingMessage: ChatMessage = { message: '', type: 'loading' };
@@ -126,7 +149,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       const messagesToSend = nonLoadingMessages.slice(-5);
   
       // Call the bot service with the filtered messages
-      this.chatbotService.getBotResponse(messagesToSend, selectedProgram).subscribe({
+      this.chatbotService.getBotResponse(messagesToSend, selectedProgramName).subscribe({
         next: (response: any) => {
           // Remove the loading message
           this.messages.pop();
@@ -136,8 +159,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
           this.needScrollToBottom = true;
           this.disableSending = false;
         },
-        error: (error) => {
-          console.error('Error fetching response:', error);
+        error: (error: any) => {
           // Remove the loading message
           this.messages.pop();
           // Add an error message
@@ -147,6 +169,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
           });
           this.needScrollToBottom = true;
           this.disableSending = false;
+          if (error.message && error.message === 'TokenMissing') {
+            this.errorSnackbar.showError('Ihre Session ist abgelaufen. Bitte melden Sie sich erneut an.', 5000);
+          }
         }
       });
     }
@@ -211,7 +236,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   protected scrollToBottom(): void {
     setTimeout(() => {
       if (this.messageElements && this.chatBody && this.messageElements.length > 0) {
-        console.log("Scrolling down")
         const lastMessageElement = this.messageElements.last;
         lastMessageElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
@@ -220,5 +244,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         }, 500);
       }
     }, 0);
+  }
+
+  onProgramChange(program: StudyProgram | null): void {
+    this.selectedStudyProgram = program;
   }
 }

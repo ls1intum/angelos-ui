@@ -1,0 +1,41 @@
+.snackbar-container {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+  }
+  
+  .snackbar {
+    background-color: #d32f2f; /* Error red */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: default; /* Disabling pointer cursor so user knows to click only the X */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    font-size: 0.875rem; /* Slightly smaller text */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .snackbar:hover {
+    transform: translateY(-2px);
+  }
+  
+  .dismiss-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: 16px; /* Space between text and icon */
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Ensure the icon is visible and properly sized */
+  .dismiss-button svg {
+    width: 20px;
+    height: 20px;
+  }

@@ -1,17 +1,11 @@
 services:
-  angelos-ui:
+  chatbot:
     image: "ghcr.io/ls1intum/angelos-ui:latest"
-    container_name: angelos-ui
-    ports:
-      - "443:443"
+    container_name: chatbot
     expose:
-      - "443"
-    volumes:
-      - type: bind
-        source: /var/lib/rbg-cert/2024-10-31T11:10:43+01:00
-        target: /etc/ssl/certs
+      - "80" 
     networks:
-      - angelos-network
+      - angelos-network 
 
 networks:
   angelos-network:

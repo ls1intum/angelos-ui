@@ -32,7 +32,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       this.authService.login(username, password).subscribe({
-        next: () => this.router.navigate(['/chat/en']), // Redirect to chat after login
+        next: () => this.router.navigate(['/en']), // Redirect to chat after login
         error: (err) => (this.errorMessage = 'Invalid username or password')
       });
     }

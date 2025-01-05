@@ -2,11 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import * as CryptoJS from 'crypto-js';
 
 export interface AuthResponse {
-  access_token: string;
-  token_type: string;
+  accessToken: string;
 }
 @Injectable({
   providedIn: 'root'
@@ -14,14 +12,16 @@ export interface AuthResponse {
 export class AuthService {
   private isAuthenticated = new BehaviorSubject<boolean>(this.getToken() !== null);
 
+  private url = environment.angelosUrl;
+
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<AuthResponse> {
     const headers = new HttpHeaders().set('x-api-key', environment.angelosAppApiKey);
-    const body = { username: username, password: password };
-    return this.http.post<AuthResponse>(environment.angelosToken, body, { headers }).pipe(
+    const body = { email: username, password: password };
+    return this.http.post<AuthResponse>(this.url + "/login", body, { headers }).pipe(
       tap((response: AuthResponse) => {
-        sessionStorage.setItem('access_token', response.access_token);
+        sessionStorage.setItem('access_token', response.accessToken);
         this.isAuthenticated.next(true);
       })
     );

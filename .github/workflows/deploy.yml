@@ -1,4 +1,4 @@
-name: Deploy Angelos-UI
+name: Deploy Chatbot
 
 on:
   push:
@@ -13,13 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Create the updated environment.prod.ts file
       - name: Create Environment File
         run: |
           echo "export const environment = {
             production: true,
-            angelosUrl: '/api/v1/question/chat',
-            angelosToken: '/api/token',
-            angelosAppApiKey: '${{secrets.ANGELOS_APP_API_KEY}}'
+            angelosUrl: '/api/chat',
+            angelosAppApiKey: '${{secrets.ANGELOS_APP_API_KEY}}',
+            organisation: 2,
+            filterByOrg: false
           };" > src/environments/environment.prod.ts
 
       - name: Verify Environment File Creation
@@ -58,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Copy Docker Compose File From Repo to VM Host
