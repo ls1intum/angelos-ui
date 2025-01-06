@@ -6,14 +6,14 @@
   }
   
   .snackbar {
-    background-color: #d32f2f; /* Error red */
+    background-color: #d32f2f;
     color: white;
     padding: 12px 24px;
     border-radius: 4px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: default; /* Disabling pointer cursor so user knows to click only the X */
+    cursor: default;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    font-size: 0.875rem; /* Slightly smaller text */
+    font-size: 0.875rem; 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,7 +28,7 @@
     border: none;
     color: white;
     cursor: pointer;
-    margin-left: 16px; /* Space between text and icon */
+    margin-left: 16px; 
     padding: 0;
     display: flex;
     align-items: center;
