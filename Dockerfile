@@ -6,9 +6,10 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
+ARG ANGULAR_ENV=production
 # Copy the application code and build the app
 COPY . ./
-RUN npm run build -- --configuration=production --base-href=/chat/
+RUN npm run build -- --configuration=${ANGULAR_ENV} --base-href=/chat/
 
 # Stage 2: Serve the app with NGINX
 FROM nginx:stable-alpine
