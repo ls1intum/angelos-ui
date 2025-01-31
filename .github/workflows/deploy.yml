@@ -8,30 +8,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Create the updated environment.prod.ts file
-      - name: Create Environment File
+      # 1) Build for Org 2
+      - name: Create Environment File Org 2
         run: |
           echo "export const environment = {
             production: true,
             angelosUrl: '/api/chat',
             angelosAppApiKey: '${{secrets.ANGELOS_APP_API_KEY}}',
             organisation: 2,
-            filterByOrg: false
+            filterByOrg: true
           };" > src/environments/environment.prod.ts
-
-      - name: Verify Environment File Creation
-        run: |
-          if [ -f src/environments/environment.prod.ts ]; then
-            echo "Environment file created successfully."
-          else
-            echo "Environment file creation failed." && exit 1
-          fi
       
+      - name: Verify Org 2 Environment File
+        run: test -f src/environments/environment.prod.ts || (echo "Env creation failed for org2." && exit 1)
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -45,13 +39,38 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push to GitHub Container Registry
+      - name: Build & Push (Org 2)
         uses: docker/build-push-action@v6
         with:
           platforms: amd64, arm64
           file: ./Dockerfile
           context: .
+          # We'll push "latest" for org2
           tags: ghcr.io/ls1intum/angelos-ui:latest
+          push: true
+          no-cache: true
+
+      # 2) Build for Org 5
+      - name: Create Environment File Org 5
+        run: |
+          echo "export const environment = {
+            production: true,
+            angelosUrl: '/api/chat',
+            angelosAppApiKey: '${{secrets.ANGELOS_APP_API_KEY}}',
+            organisation: 5,
+            filterByOrg: true
+          };" > src/environments/environment.prod.ts
+
+      - name: Verify Org 5 Environment File
+        run: test -f src/environments/environment.prod.ts || (echo "Env creation failed for org5." && exit 1)
+
+      - name: Build & Push (Org 5)
+        uses: docker/build-push-action@v6
+        with:
+          platforms: amd64, arm64
+          file: ./Dockerfile
+          context: .
+          tags: ghcr.io/ls1intum/angelos-ui:org5-latest
           push: true
           no-cache: true
 
